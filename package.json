@@ -1,0 +1,22 @@
+{
+  "name": "name-icon-generator",
+  "version": "0.0.1",
+  "description": "A simple project name and icon generator.",
+  "main": "index.js",
+  "author": {
+    "name": "Stefan Fisk",
+    "email": "contact@stefanfisk.com",
+    "url": "http://stefanfisk.com/"
+  },
+  "license": "ISC",
+  "bin": {
+    "name-icon-generator": "./index.js"
+  },
+  "dependencies": {
+    "canvas": "^1.5.0",
+    "jdenticon": "^1.3.2",
+    "mkdirp": "^0.5.1",
+    "project-name-generator": "^2.1.3",
+    "resize-canvas": "^1.0.0"
+  }
+}
