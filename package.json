@@ -1,5 +1,6 @@
 {
-  "name": "name-icon-generator",
+  "name": "heavenly-harmony",
+  "title": "Heavenly Harmony",
   "version": "0.0.1",
   "description": "A simple project name and icon generator.",
   "main": "index.js",
@@ -10,7 +11,7 @@
   },
   "license": "ISC",
   "bin": {
-    "name-icon-generator": "./index.js"
+    "heavenly-harmony": "./index.js"
   },
   "dependencies": {
     "canvas": "^1.5.0",
