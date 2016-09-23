@@ -10,8 +10,8 @@ var path = require('path');
 
 jdenticon.config = {
   lightness: {
-    color: [0.1, 1.0],
-    grayscale: [0.1, 0.9],
+    color: [0, 1.0],
+    grayscale: [0, 1],
   },
   saturation: 1.0,
 };
@@ -117,6 +117,8 @@ var generated = generateName({alliterative: true});
 var name = generated.dashed;
 var title = generated.spaced.replace(/\b\w/g, l => l.toUpperCase())
 var hash = crypto.createHash('md5').update(name).digest('hex')
+var hue = parseInt(hash.slice(-2, hash.length), 16) / 256 * 360;
+var backgroundColor = `hsl(${hue}, 75%, 50%)`;
 
 console.log(`Name: ${name}`);
 console.log(`Title: ${title}`);
@@ -125,30 +127,26 @@ fs.writeFileSync('./name.txt', `${name}\n`);
 fs.writeFileSync('./title.txt', `${title}\n`);
 
 for ({filename, suffix = 'png', size, padding} of icons) {
-  var canvasSize = 30 <= size ? size : 2 * size;
-  var canvasPadding = 30 <= size ? padding : 2 * padding;
+  var jiconSize = 30 <= size ? size : 2 * size;
+  var jiconPadding = 30 <= size ? padding : 2 * padding;
 
-  var canvas = new Canvas(canvasSize, canvasSize);
-  canvas.patternQuality = 'best';
-  canvas.filter = 'best';
+  var jicon = new Canvas(jiconSize, jiconSize);
+  jicon.patternQuality = 'best';
+  jicon.filter = 'best';
 
-  var ctx = canvas.getContext('2d');
+  var jiconCtx = jicon.getContext('2d');
+  jdenticon.drawIcon(jiconCtx, hash, jiconSize, jiconPadding);
 
-  jdenticon.drawIcon(ctx, hash, canvasSize, canvasPadding);
+  var icon = new Canvas(size, size);
+  icon.patternQuality = 'best';
+  icon.filter = 'best';
 
-  if (30 <= size) {
-    var image = new Canvas(canvasSize, canvasSize);
-    var imageCtx = image.getContext('2d');
-    imageCtx.drawImage(canvas, 0, 0);
+  var iconCtx = icon.getContext('2d');
+  iconCtx.fillStyle = backgroundColor;
+  iconCtx.fillRect(0, 0, size, size);
+  iconCtx.drawImage(jicon, 0, 0, size, size);
 
-    canvas.width = size;
-    canvas.height = size;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-  }
-
-  var png = canvas.toBuffer();
+  var png = icon.toBuffer();
 
   var filepath = `./${filename}.${suffix}`;
   var dir = path.dirname(filepath);
